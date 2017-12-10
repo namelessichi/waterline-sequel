@@ -377,7 +377,12 @@ CriteriaProcessor.prototype.buildParam = function buildParam (tableName, propert
   var escape = utils.escapeName,
       param;
 
-  param = escape(tableName, this.escapeCharacter, this.schemaName) + '.' + escape(property, this.escapeCharacter);
+  if (property.indexOf('.') === -1) {
+      param = escape(tableName, this.escapeCharacter, this.schemaName) + '.' + escape(property, this.escapeCharacter);
+  } else {
+      var p = property.split('.');
+      param = escape(p[0], this.escapeCharacter, this.schemaName) + '.' + escape(p[1], this.escapeCharacter);
+  }
 
   if (caseSensitive) {
     param = 'LOWER(' + param + ')';
